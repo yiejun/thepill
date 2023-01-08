@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Home"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:id="@+id/Home"/>
+    <item android:title="Camera"
+        android:icon="@drawable/propillcamera"
+        android:id="@+id/Camera"/>
+    <item android:title="Scan"
+        android:icon="@drawable/ocrpropill"
+        android:id="@+id/Scan"/>
+    <item android:title="Add"
+        android:icon="@drawable/pluspropill"
+        android:id="@+id/Add"/>
+</menu>
