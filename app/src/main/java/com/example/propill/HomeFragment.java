@@ -87,7 +87,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         view = inflater.inflate(R.layout.fragment_home, container, false);
         registerbutton = (ImageView) view.findViewById(R.id.registerbutton);
         registerbutton.setOnClickListener(this);
-        Button2 = (R.id.button2);
+       /* Button2 = (R.id.button2);
 
         Button2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +107,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
-
+*/
         // Inflate the layout for this fragment
         return view;
 
