@@ -9,13 +9,22 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class Register extends AppCompatActivity {
     Boolean sunFlag = false;
     EditText pillName;
     AppCompatButton sunBtn, monBtn, tueBtn, wedBtn, thuBtn, friBtn, satBtn, canBtn, saveBtn;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference userRef = database.getReference("users");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +43,18 @@ public class Register extends AppCompatActivity {
         satBtn = (AppCompatButton) findViewById(R.id.satBtn);
         canBtn = (AppCompatButton) findViewById(R.id.canBtn);
         saveBtn = (AppCompatButton) findViewById(R.id.saveBtn);
+
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String id = null;
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         sunBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
