@@ -23,4 +23,3 @@ public class mainpage_pilldiary_data_class {
         return this.getPillName();
     }
 }
-}
