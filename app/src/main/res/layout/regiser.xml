@@ -109,7 +109,7 @@
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:ems="10"
-            android:enabled="false"
+            android:enabled="true"
             android:inputType="textPersonName" />
 
         <TextView

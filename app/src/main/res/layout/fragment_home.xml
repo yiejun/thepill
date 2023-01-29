@@ -99,21 +99,55 @@
         </LinearLayout>
 
 
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
             <ImageView
                 android:id="@+id/imageView5"
-                android:layout_width="308dp"
-                android:layout_height="186dp"
+                android:layout_width="match_parent"
+                android:layout_height="446dp"
+                android:layout_margin="10dp"
                 app:srcCompat="@drawable/mainpagetoplightbluesquare" />
+
             <ImageView
                 android:id="@+id/registerbutton"
-                android:clickable="true"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_alignParentRight="true"
                 android:layout_gravity="right"
-                android:layout_marginTop="5dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:clickable="true"
                 app:srcCompat="@drawable/pluspropill" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="456dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="40dp"
+                    android:text="Today's Pill"
+                    android:textColor="#3652a3"
+                    android:textStyle="bold" />
+
+                <ListView
+                    android:id="@+id/pilllist"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="20dp"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </LinearLayout>
+
+        </FrameLayout>
 
     </LinearLayout>
 

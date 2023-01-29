@@ -111,9 +111,7 @@ public class mainapge extends AppCompatActivity {
                 case R.id.Add:
                     transaction.replace(R.id.menu_frame_layout, addFragment).commitAllowingStateLoss();
                     break;
-
             }
-
             return true;
         }
     }

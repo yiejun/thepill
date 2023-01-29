@@ -1,10 +1,12 @@
 package com.example.propill;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TimePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -23,11 +25,22 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Register extends AppCompatActivity {
 
     Boolean sunFlag = false;
+    Boolean monFlag = false;
+    Boolean tueFlag = false;
+    Boolean wedFlag = false;
+    Boolean thuFlag = false;
+    Boolean friFlag = false;
+    Boolean satFlag = false;
+    private TimePicker timePicker;
+    int hour,min;
     EditText pillName;
+    EditText strPillinventory;
     AppCompatButton sunBtn, monBtn, tueBtn, wedBtn, thuBtn, friBtn, satBtn, canBtn, saveBtn;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference userRef = database.getReference("users");
@@ -35,9 +48,19 @@ public class Register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.regiser);
+        timePicker = findViewById(R.id.timepicker);
+        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker timePicker, int a, int b) {
+                hour = a;
+                min = b;
+            }
+        });
+
 
         Intent intent = getIntent();
-        pillName=(EditText)findViewById(R.id.pillname);
+        pillName = (EditText) findViewById(R.id.pillname);
+        strPillinventory = (EditText) findViewById((R.id.pillinventory));
         pillName.setText(intent.getStringExtra("pill"));
 
         sunBtn = (AppCompatButton) findViewById(R.id.sunBtn);
@@ -64,10 +87,10 @@ public class Register extends AppCompatActivity {
         sunBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (sunFlag){
+                if (sunFlag) {
                     sunBtn.setBackgroundColor(Color.parseColor("#eff1ff"));
                     sunFlag = false;
-                }else {
+                } else {
                     sunBtn.setBackgroundColor(Color.parseColor("#ffffff"));
                     sunFlag = true;
                 }
@@ -76,72 +99,72 @@ public class Register extends AppCompatActivity {
         monBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (sunFlag){
+                if (monFlag) {
                     monBtn.setBackgroundColor(Color.parseColor("#eff1ff"));
-                    sunFlag = false;
-                }else {
+                    monFlag = false;
+                } else {
                     monBtn.setBackgroundColor(Color.parseColor("#ffffff"));
-                    sunFlag = true;
+                    monFlag = true;
                 }
             }
         });
         tueBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (sunFlag){
+                if (tueFlag) {
                     tueBtn.setBackgroundColor(Color.parseColor("#eff1ff"));
-                    sunFlag = false;
-                }else {
+                    tueFlag = false;
+                } else {
                     tueBtn.setBackgroundColor(Color.parseColor("#ffffff"));
-                    sunFlag = true;
+                    tueFlag = true;
                 }
             }
         });
         wedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (sunFlag){
+                if (wedFlag) {
                     wedBtn.setBackgroundColor(Color.parseColor("#eff1ff"));
-                    sunFlag = false;
-                }else {
+                    wedFlag = false;
+                } else {
                     wedBtn.setBackgroundColor(Color.parseColor("#ffffff"));
-                    sunFlag = true;
+                    wedFlag = true;
                 }
             }
         });
         thuBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (sunFlag){
+                if (thuFlag) {
                     thuBtn.setBackgroundColor(Color.parseColor("#eff1ff"));
-                    sunFlag = false;
-                }else {
+                    thuFlag = false;
+                } else {
                     thuBtn.setBackgroundColor(Color.parseColor("#ffffff"));
-                    sunFlag = true;
+                    thuFlag = true;
                 }
             }
         });
         friBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (sunFlag){
+                if (friFlag) {
                     friBtn.setBackgroundColor(Color.parseColor("#eff1ff"));
-                    sunFlag = false;
-                }else {
+                    friFlag = false;
+                } else {
                     friBtn.setBackgroundColor(Color.parseColor("#ffffff"));
-                    sunFlag = true;
+                    friFlag = true;
                 }
             }
         });
         satBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (sunFlag){
+                if (sunFlag) {
                     satBtn.setBackgroundColor(Color.parseColor("#eff1ff"));
-                    sunFlag = false;
-                }else {
+                    friFlag = false;
+                } else {
                     satBtn.setBackgroundColor(Color.parseColor("#ffffff"));
-                    sunFlag = true;
+                    satFlag = true;
                 }
             }
         });
@@ -149,7 +172,7 @@ public class Register extends AppCompatActivity {
         canBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),mainapge.class);
+                Intent intent = new Intent(getApplicationContext(), mainapge.class);
                 startActivity(intent);
             }
         });
@@ -157,11 +180,40 @@ public class Register extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),mainapge.class);
-                startActivity(intent);
-                Toast.makeText(Register.this, "Successfully Saved", Toast.LENGTH_SHORT).show();
+                /*Intent intent = new Intent(getApplicationContext(),mainapge.class);
+                startActivity(intent);*/
+                String pillname = String.valueOf(pillName.getText());
+                String Pillinventory = String.valueOf(strPillinventory.getText());
+                saveData(pillname,Pillinventory);
+                Toast.makeText(Register.this, pillname + " , " + Pillinventory, Toast.LENGTH_LONG).show();
+                Toast.makeText(Register.this, hour + " , " + min, Toast.LENGTH_LONG).show();
+
 
             }
         });
+    }
+    private void saveData(String pillname,String Pillinventory){
+        SharedPreferences preferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
+        String id= preferences.getString("id", "text");
+
+//최종 데이터
+        Map<String, Object> data = new HashMap<>();
+
+//요일별 데이터 저장
+        data.put("sun",sunFlag);
+        data.put("mon",monFlag);
+        data.put("tue",tueFlag);
+        data.put("wed",wedFlag);
+        data.put("thu",thuFlag);
+        data.put("fri",friFlag);
+        data.put("sat",satFlag);
+
+//유저 및 약 정보 저장
+        data.put("email",id);
+        data.put("pillName",pillname);
+        data.put("pillInventory",Pillinventory);
+        data.put("hour",hour);
+        data.put("min",min);
+        userRef.push().setValue(data);
     }
 }
