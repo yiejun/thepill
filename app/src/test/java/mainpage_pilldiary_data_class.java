@@ -1,25 +1,25 @@
 public class mainpage_pilldiary_data_class {
-    private int hour, min;
+    private int time;
     private String pillName;
 
-    public mainpage_pilldiary_data_class(int hour, int min, String pillName){
-        this.hour = hour;
-        this.min = min;
+    public mainpage_pilldiary_data_class(int time, String pillName){
+        this.time = time;
         this.pillName = pillName;
     }
 
-    public int getHour()
+    public int getTime()
     {
-        return this.hour;
+        return this.getTime();
     }
 
-    public String getmin()
-    {
-        return this.getmin();
-    }
 
     public String getPillName()
     {
         return this.getPillName();
+    }
+
+    public int getimageView6()
+    {
+        return this.getimageView6();
     }
 }
