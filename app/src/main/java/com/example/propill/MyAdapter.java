@@ -1,12 +1,6 @@
+package com.example.propill;
+
 import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,13 +41,13 @@ public class MyAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View converView, ViewGroup parent) {
-        View view = mLayoutInflater.inflate(R.layout.listview_custom, null);
+        View view = mLayoutInflater.inflate(R.layout.itemlistbar, null);
 
-        ImageView mainpagepilldiary = (ImageView)view.findViewById(R.id.imageView);
+        view.setBackgroundResource(R.drawable.mainapgepilldiary);
+
         TextView pillname = (TextView)view.findViewById(R.id.pillname);
         TextView time = (TextView)view.findViewById(R.id.time);
 
-        mainpagepilldiary.setImageResource(sample.get(position).getImageview());
         pillname.setText(sample.get(position).getPillname());
         time.setText(sample.get(position).getTime());
 

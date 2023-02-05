@@ -1,9 +1,14 @@
 package com.example.propill;
 
+import static android.content.Context.MODE_PRIVATE;
 import static androidx.core.content.ContextCompat.checkSelfPermission;
 
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -22,16 +27,33 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
-import com.example.propill.ml.ModelUnquant;
+import android.widget.ListView;
+import android.widget.Toast;
 
+import com.example.propill.ml.ModelUnquant;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 
 /**
@@ -54,9 +76,18 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     Button Button4;
     Button Button5;
     Button Button6;
+    private int imageview;
+    private String time;
+    private String pillname;
+    Date mDate;
+    String strDay;
 
     private View view;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference userRef = database.getReference("users");
 
+
+    ArrayList<SampleData> pillDataList;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -87,6 +118,173 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         view = inflater.inflate(R.layout.fragment_home, container, false);
         registerbutton = (ImageView) view.findViewById(R.id.registerbutton);
         registerbutton.setOnClickListener(this);
+
+        this.InitializeMovieData(container);
+
+        mDate = Calendar.getInstance().getTime();
+        SimpleDateFormat format = new SimpleDateFormat("dd", Locale.getDefault());  // 2월 15일
+
+        //오늘 일자
+        String todayDate = format.format(mDate);
+
+        //today
+        Date currentDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(currentDate);
+
+        int dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
+        if(dayOfWeekNumber == 1){
+            strDay = "Sun";
+        }
+        else if(dayOfWeekNumber == 2){
+            strDay = "Mon";
+        }
+        else if(dayOfWeekNumber == 3) {
+            strDay = "Tue";
+        }
+        else if(dayOfWeekNumber == 4) {
+            strDay = "Wed";
+        }
+        else if(dayOfWeekNumber == 5) {
+            strDay = "Thu";
+        }
+        else if(dayOfWeekNumber == 6) {
+            strDay = "Fri";
+        }
+        else if(dayOfWeekNumber == 7) {
+            strDay = "Sat";
+        }
+
+Button4 = view.findViewById(R.id.button4);
+Button4.setText(todayDate + "\n" +strDay);
+
+calendar.add(Calendar.DATE,-1);
+        mDate = calendar.getTime();
+        //오늘 일자
+        String yesterDate = format.format(mDate);
+        dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
+        if(dayOfWeekNumber == 1){
+            strDay = "Sun";
+        }
+        else if(dayOfWeekNumber == 2){
+            strDay = "Mon";
+        }
+        else if(dayOfWeekNumber == 3) {
+            strDay = "Tue";
+        }
+        else if(dayOfWeekNumber == 4) {
+            strDay = "Wed";
+        }
+        else if(dayOfWeekNumber == 5) {
+            strDay = "Thu";
+        }
+        else if(dayOfWeekNumber == 6) {
+            strDay = "Fri";
+        }
+        else if(dayOfWeekNumber == 7) {
+            strDay = "Sat";
+        }
+
+        Button3 = view.findViewById(R.id.button3);
+        Button3.setText(yesterDate + "\n" +strDay);
+
+        calendar.add(Calendar.DATE,-1);
+        mDate = calendar.getTime();
+        //오늘 일자
+        String dayDate = format.format(mDate);
+        dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
+        if(dayOfWeekNumber == 1){
+            strDay = "Sun";
+        }
+        else if(dayOfWeekNumber == 2){
+            strDay = "Mon";
+        }
+        else if(dayOfWeekNumber == 3) {
+            strDay = "Tue";
+        }
+        else if(dayOfWeekNumber == 4) {
+            strDay = "Wed";
+        }
+        else if(dayOfWeekNumber == 5) {
+            strDay = "Thu";
+        }
+        else if(dayOfWeekNumber == 6) {
+            strDay = "Fri";
+        }
+        else if(dayOfWeekNumber == 7) {
+            strDay = "Sat";
+        }
+
+        Button2 = view.findViewById(R.id.button2);
+        Button2.setText(dayDate + "\n" +strDay);
+
+        calendar.add(Calendar.DATE,+3);
+        mDate = calendar.getTime();
+        //오늘 일자
+        String plusDate = format.format(mDate);
+        dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
+        if(dayOfWeekNumber == 1){
+            strDay = "Sun";
+        }
+        else if(dayOfWeekNumber == 2){
+            strDay = "Mon";
+        }
+        else if(dayOfWeekNumber == 3) {
+            strDay = "Tue";
+        }
+        else if(dayOfWeekNumber == 4) {
+            strDay = "Wed";
+        }
+        else if(dayOfWeekNumber == 5) {
+            strDay = "Thu";
+        }
+        else if(dayOfWeekNumber == 6) {
+            strDay = "Fri";
+        }
+        else if(dayOfWeekNumber == 7) {
+            strDay = "Sat";
+        }
+
+        Button5 = view.findViewById(R.id.button5);
+        Button5.setText(plusDate + "\n" +strDay);
+
+        calendar.add(Calendar.DATE,+1);
+        mDate = calendar.getTime();
+        //오늘 일자
+        String plusplusDate = format.format(mDate);
+        dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
+        if(dayOfWeekNumber == 1){
+            strDay = "Sun";
+        }
+        else if(dayOfWeekNumber == 2){
+            strDay = "Mon";
+        }
+        else if(dayOfWeekNumber == 3) {
+            strDay = "Tue";
+        }
+        else if(dayOfWeekNumber == 4) {
+            strDay = "Wed";
+        }
+        else if(dayOfWeekNumber == 5) {
+            strDay = "Thu";
+        }
+        else if(dayOfWeekNumber == 6) {
+            strDay = "Fri";
+        }
+        else if(dayOfWeekNumber == 7) {
+            strDay = "Sat";
+        }
+
+        Button6 = view.findViewById(R.id.button6);
+        Button6.setText(plusplusDate + "\n" +strDay);
+
+        Button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
        /* Button2 = (R.id.button2);
 
         Button2.setOnClickListener(new View.OnClickListener() {
@@ -184,4 +382,43 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }*/
+
+    public void InitializeMovieData(ViewGroup container)
+    {
+        pillDataList = new ArrayList<SampleData>();
+        SharedPreferences preferences = this.getActivity().getSharedPreferences("UserInfo", MODE_PRIVATE);
+        String id= preferences.getString("id", "text");
+
+        List list = new ArrayList();
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                    Object obj = postSnapshot.getValue();
+                    Map map = (Map) obj;
+                    if(map.get("email").equals(id) ){
+                        list.add(obj);
+                    }
+
+                }
+                for(int i=0; i<list.size(); i++){
+                    Map tempData = ((Map)list.get(i));
+                    String tempTime = tempData.get("hour")+":"+tempData.get("min");
+                    pillDataList.add(new SampleData(tempTime, (String) tempData.get("pillName")));
+                }
+
+                ListView listView = (ListView)view.findViewById(R.id.pilllist);
+                final MyAdapter myAdapter = new MyAdapter(container.getContext(),pillDataList);
+
+                listView.setAdapter(myAdapter);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
 }
