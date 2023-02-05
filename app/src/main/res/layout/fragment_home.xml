@@ -41,7 +41,7 @@
                 android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/mainpageweekbutton"
-                android:elevation="15dp"
+                android:outlineProvider="none"
                 android:text="Button" />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -68,8 +68,9 @@
                 android:outlineProvider="none"
                 android:text="Button" />
 
-            <Button
-                android:id="@+id/button5"
+            <androidx.appcompat.widget.AppCompatButton
+
+            android:id="@+id/button5"
                 android:layout_width="55dp"
                 android:layout_height="58dp"
                 android:layout_marginLeft="5dp"
@@ -80,7 +81,7 @@
                 android:outlineProvider="none"
                 android:text="Button" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/button6"
                 android:layout_width="55dp"
                 android:layout_height="58dp"
@@ -102,6 +103,13 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="15dp"
+                app:srcCompat="@drawable/mainpagetodaypillsquare" />
 
             <ImageView
                 android:id="@+id/registerbutton"

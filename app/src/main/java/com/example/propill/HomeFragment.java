@@ -39,6 +39,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.collection.LLRBNode;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.tensorflow.lite.DataType;
@@ -76,6 +77,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     Button Button4;
     Button Button5;
     Button Button6;
+    String selectDay;
     private int imageview;
     private String time;
     private String pillname;
@@ -134,26 +136,27 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
         int dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
         if(dayOfWeekNumber == 1){
-            strDay = "Sun";
+            strDay = "sun";
         }
         else if(dayOfWeekNumber == 2){
-            strDay = "Mon";
+            strDay = "mon";
         }
         else if(dayOfWeekNumber == 3) {
-            strDay = "Tue";
+            strDay = "tue";
         }
         else if(dayOfWeekNumber == 4) {
-            strDay = "Wed";
+            strDay = "wed";
         }
         else if(dayOfWeekNumber == 5) {
-            strDay = "Thu";
+            strDay = "thu";
         }
         else if(dayOfWeekNumber == 6) {
-            strDay = "Fri";
+            strDay = "fri";
         }
         else if(dayOfWeekNumber == 7) {
-            strDay = "Sat";
+            strDay = "sat";
         }
+        selectDay=strDay;
 
 Button4 = view.findViewById(R.id.button4);
 Button4.setText(todayDate + "\n" +strDay);
@@ -281,9 +284,262 @@ calendar.add(Calendar.DATE,-1);
         Button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                GradientDrawable gradientDrawable = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
+                gradientDrawable.setColor(Color.WHITE);
 
+                Button3.setBackground(gradientDrawable);
+                Button3.setTextColor(Color.rgb(54, 82, 163));
+
+                Button2.setBackground(gradientDrawable);
+                Button2.setTextColor(Color.rgb(54, 82, 163));
+                Button5.setBackground(gradientDrawable);
+                Button5.setTextColor(Color.rgb(54, 82, 163));
+                Button6.setBackground(gradientDrawable);
+                Button6.setTextColor(Color.rgb(54, 82, 163));
+
+                GradientDrawable gradientDrawable2 = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
+                gradientDrawable2.setColor(Color.rgb(54,82,163));
+                Button4.setBackground(gradientDrawable2);
+                Button4.setTextColor(Color.WHITE);
+
+                //today
+                Date currentDate = new Date();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(currentDate);
+
+                int dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
+                if(dayOfWeekNumber == 1){
+                    selectDay = "sun";
+                }
+                else if(dayOfWeekNumber == 2){
+                    selectDay = "mon";
+                }
+                else if(dayOfWeekNumber == 3) {
+                    selectDay = "tue";
+                }
+                else if(dayOfWeekNumber == 4) {
+                    selectDay = "wed";
+                }
+                else if(dayOfWeekNumber == 5) {
+                    selectDay = "thu";
+                }
+                else if(dayOfWeekNumber == 6) {
+                    selectDay = "fri";
+                }
+                else if(dayOfWeekNumber == 7) {
+                    selectDay = "sat";
+                }
+                InitializeMovieData(container);
             }
         });
+        Button5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GradientDrawable gradientDrawable = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
+                gradientDrawable.setColor(Color.WHITE);
+
+                Button3.setBackground(gradientDrawable);
+                Button3.setTextColor(Color.rgb(54, 82, 163));
+
+                Button4.setBackground(gradientDrawable);
+                Button4.setTextColor(Color.rgb(54, 82, 163));
+                Button2.setBackground(gradientDrawable);
+                Button2.setTextColor(Color.rgb(54, 82, 163));
+                Button6.setBackground(gradientDrawable);
+                Button6.setTextColor(Color.rgb(54, 82, 163));
+
+                GradientDrawable gradientDrawable2 = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
+                gradientDrawable2.setColor(Color.rgb(54,82,163));
+                Button5.setBackground(gradientDrawable2);
+                Button5.setTextColor(Color.WHITE);
+
+                //today
+                Date currentDate = new Date();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(currentDate);
+                calendar.add(Calendar.DATE,+1);
+
+                int dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
+                if(dayOfWeekNumber == 1){
+                    selectDay = "sun";
+                }
+                else if(dayOfWeekNumber == 2){
+                    selectDay = "mon";
+                }
+                else if(dayOfWeekNumber == 3) {
+                    selectDay = "tue";
+                }
+                else if(dayOfWeekNumber == 4) {
+                    selectDay = "wed";
+                }
+                else if(dayOfWeekNumber == 5) {
+                    selectDay = "thu";
+                }
+                else if(dayOfWeekNumber == 6) {
+                    selectDay = "fri";
+                }
+                else if(dayOfWeekNumber == 7) {
+                    selectDay = "sat";
+                }
+                InitializeMovieData(container);
+            }
+        });
+        Button6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GradientDrawable gradientDrawable = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
+                gradientDrawable.setColor(Color.WHITE);
+
+                Button3.setBackground(gradientDrawable);
+                Button3.setTextColor(Color.rgb(54, 82, 163));
+
+                Button4.setBackground(gradientDrawable);
+                Button4.setTextColor(Color.rgb(54, 82, 163));
+                Button5.setBackground(gradientDrawable);
+                Button5.setTextColor(Color.rgb(54, 82, 163));
+                Button2.setBackground(gradientDrawable);
+                Button2.setTextColor(Color.rgb(54, 82, 163));
+
+                GradientDrawable gradientDrawable2 = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
+                gradientDrawable2.setColor(Color.rgb(54,82,163));
+                Button6.setBackground(gradientDrawable2);
+                Button6.setTextColor(Color.WHITE);
+
+                //today
+                Date currentDate = new Date();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(currentDate);
+                calendar.add(Calendar.DATE,+2);
+
+                int dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
+                if(dayOfWeekNumber == 1){
+                    selectDay = "sun";
+                }
+                else if(dayOfWeekNumber == 2){
+                    selectDay = "mon";
+                }
+                else if(dayOfWeekNumber == 3) {
+                    selectDay = "tue";
+                }
+                else if(dayOfWeekNumber == 4) {
+                    selectDay = "wed";
+                }
+                else if(dayOfWeekNumber == 5) {
+                    selectDay = "thu";
+                }
+                else if(dayOfWeekNumber == 6) {
+                    selectDay = "fri";
+                }
+                else if(dayOfWeekNumber == 7) {
+                    selectDay = "sat";
+                }
+                InitializeMovieData(container);
+            }
+        });
+        Button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GradientDrawable gradientDrawable = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
+                gradientDrawable.setColor(Color.WHITE);
+
+                Button3.setBackground(gradientDrawable);
+                Button3.setTextColor(Color.rgb(54, 82, 163));
+
+                Button4.setBackground(gradientDrawable);
+                Button4.setTextColor(Color.rgb(54, 82, 163));
+                Button5.setBackground(gradientDrawable);
+                Button5.setTextColor(Color.rgb(54, 82, 163));
+                Button6.setBackground(gradientDrawable);
+                Button6.setTextColor(Color.rgb(54, 82, 163));
+
+                GradientDrawable gradientDrawable2 = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
+                gradientDrawable2.setColor(Color.rgb(54,82,163));
+                Button2.setBackground(gradientDrawable2);
+                Button2.setTextColor(Color.WHITE);
+                //today
+                Date currentDate = new Date();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(currentDate);
+                calendar.add(Calendar.DATE,-2);
+
+                int dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
+                if(dayOfWeekNumber == 1){
+                    selectDay = "sun";
+                }
+                else if(dayOfWeekNumber == 2){
+                    selectDay = "mon";
+                }
+                else if(dayOfWeekNumber == 3) {
+                    selectDay = "tue";
+                }
+                else if(dayOfWeekNumber == 4) {
+                    selectDay = "wed";
+                }
+                else if(dayOfWeekNumber == 5) {
+                    selectDay = "thu";
+                }
+                else if(dayOfWeekNumber == 6) {
+                    selectDay = "fri";
+                }
+                else if(dayOfWeekNumber == 7) {
+                    selectDay = "sat";
+                }
+                InitializeMovieData(container);
+            }
+        });
+        Button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                GradientDrawable gradientDrawable = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
+                gradientDrawable.setColor(Color.WHITE);
+
+                Button2.setBackground(gradientDrawable);
+                Button2.setTextColor(Color.rgb(54, 82, 163));
+                Button4.setBackground(gradientDrawable);
+                Button4.setTextColor(Color.rgb(54, 82, 163));
+                Button5.setBackground(gradientDrawable);
+                Button5.setTextColor(Color.rgb(54, 82, 163));
+                Button6.setBackground(gradientDrawable);
+                Button6.setTextColor(Color.rgb(54, 82, 163));
+
+                GradientDrawable gradientDrawable2 = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
+                gradientDrawable2.setColor(Color.rgb(54,82,163));
+                Button3.setBackground(gradientDrawable2);
+                Button3.setTextColor(Color.WHITE);
+
+                //today
+                Date currentDate = new Date();
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(currentDate);
+                calendar.add(Calendar.DATE,-1);
+
+                int dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
+                if(dayOfWeekNumber == 1){
+                    selectDay = "sun";
+                }
+                else if(dayOfWeekNumber == 2){
+                    selectDay = "mon";
+                }
+                else if(dayOfWeekNumber == 3) {
+                    selectDay = "tue";
+                }
+                else if(dayOfWeekNumber == 4) {
+                    selectDay = "wed";
+                }
+                else if(dayOfWeekNumber == 5) {
+                    selectDay = "thu";
+                }
+                else if(dayOfWeekNumber == 6) {
+                    selectDay = "fri";
+                }
+                else if(dayOfWeekNumber == 7) {
+                    selectDay = "sat";
+                }
+                InitializeMovieData(container);
+            }
+        });
+
+
 
        /* Button2 = (R.id.button2);
 
@@ -307,9 +563,7 @@ calendar.add(Calendar.DATE,-1);
         });
 */
 
-        GradientDrawable gradientDrawable = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
-        gradientDrawable.setColor(Color.BLACK);
-        Button3.setBackground(gradientDrawable);
+
         // Inflate the layout for this fragment
         return view;
 
@@ -397,10 +651,11 @@ calendar.add(Calendar.DATE,-1);
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                pillDataList = new ArrayList<>();
                 for (DataSnapshot postSnapshot: snapshot.getChildren()) {
                     Object obj = postSnapshot.getValue();
                     Map map = (Map) obj;
-                    if(map.get("email").equals(id) ){
+                    if(map.get("email").equals(id) && (Boolean)map.get(selectDay)){
                         list.add(obj);
                     }
 
