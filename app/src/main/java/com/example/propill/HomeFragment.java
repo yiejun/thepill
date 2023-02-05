@@ -306,6 +306,10 @@ calendar.add(Calendar.DATE,-1);
             }
         });
 */
+
+        GradientDrawable gradientDrawable = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
+        gradientDrawable.setColor(Color.BLACK);
+        Button3.setBackground(gradientDrawable);
         // Inflate the layout for this fragment
         return view;
 
