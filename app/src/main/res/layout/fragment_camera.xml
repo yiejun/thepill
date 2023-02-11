@@ -12,10 +12,10 @@
         android:text="camerafragment" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/Button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:text="Button" />
+        android:text="Button2" />
 
 </FrameLayout>
