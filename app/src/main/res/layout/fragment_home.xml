@@ -102,13 +102,15 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1">
 
             <ImageView
                 android:id="@+id/imageView4"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="15dp"
+                android:layout_margin="10dp"
                 app:srcCompat="@drawable/mainpagetodaypillsquare" />
 
             <ImageView
@@ -124,14 +126,14 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="456dp"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/textView12"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="40dp"
                     android:text="Today's Pill"
@@ -142,15 +144,40 @@
                     android:id="@+id/pilllist"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_margin="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:divider="#fff"
+                    android:dividerHeight="10dp"
                     android:orientation="horizontal"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    android:dividerHeight="10dp"
-                    android:divider="#fff"
-                    />
+                    app:layout_constraintTop_toTopOf="parent" />
             </LinearLayout>
 
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/imageView7"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/mainpageinventorywhite" />
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                app:srcCompat="@drawable/mainpagepillinventoryblue" />
+
+            <ListView
+                android:id="@+id/InventoryList"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="13dp" />
         </FrameLayout>
 
     </LinearLayout>

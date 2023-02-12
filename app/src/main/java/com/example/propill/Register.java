@@ -47,9 +47,10 @@ public class Register extends AppCompatActivity {
     int hour,min;
     EditText pillName;
     EditText strPillinventory;
-    AppCompatButton sunBtn, monBtn, tueBtn, wedBtn, thuBtn, friBtn, satBtn, canBtn, saveBtn;
+    AppCompatButton sunBtn, monBtn, tueBtn, wedBtn, thuBtn, friBtn, satBtn, canBtn, saveBtn, cancelBtn;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference userRef = database.getReference("users");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +77,7 @@ public class Register extends AppCompatActivity {
         thuBtn = (AppCompatButton) findViewById(R.id.thuBtn);
         friBtn = (AppCompatButton) findViewById(R.id.friBtn);
         satBtn = (AppCompatButton) findViewById(R.id.satBtn);
-        canBtn = (AppCompatButton) findViewById(R.id.canBtn);
+        canBtn = (AppCompatButton) findViewById(R.id.cancelBtn);
         saveBtn = (AppCompatButton) findViewById(R.id.saveBtn);
 
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -174,7 +175,7 @@ public class Register extends AppCompatActivity {
                 }
             }
         });
-        Button canBtn = findViewById(R.id.canBtn);
+        Button canBtn = findViewById(R.id.cancelBtn);
         canBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -186,8 +187,8 @@ public class Register extends AppCompatActivity {
         saveBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*Intent intent = new Intent(getApplicationContext(),mainapge.class);
-                startActivity(intent);*/
+                Intent intent = new Intent(getApplicationContext(),mainapge.class);
+                startActivity(intent);
                 String pillname = String.valueOf(pillName.getText());
                 String Pillinventory = String.valueOf(strPillinventory.getText());
                 saveData(pillname,Pillinventory);
@@ -195,6 +196,13 @@ public class Register extends AppCompatActivity {
                 Toast.makeText(Register.this, hour + " , " + min, Toast.LENGTH_LONG).show();
 
 
+            }
+        });
+        Button cancelBtn = findViewById(R.id.cancelBtn);
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),mainapge.class);
             }
         });
     }

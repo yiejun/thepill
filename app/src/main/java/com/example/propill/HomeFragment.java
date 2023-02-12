@@ -90,6 +90,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
 
     ArrayList<SampleData> pillDataList;
+    ArrayList<InventoryData> InventoryList;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -122,6 +123,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         registerbutton.setOnClickListener(this);
 
         this.InitializeMovieData(container);
+        this.InitializeInventoryData(container);
 
         mDate = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("dd", Locale.getDefault());  // 2월 15일
@@ -679,5 +681,48 @@ calendar.add(Calendar.DATE,-1);
             }
         });
 
+
     }
-}
+
+    public void InitializeInventoryData(ViewGroup Container){
+        InventoryList = new ArrayList<InventoryData>();
+        SharedPreferences preferences = this.getActivity().getSharedPreferences("UserInfo", MODE_PRIVATE);
+        String id= preferences.getString("id", "text");
+
+        List list = new ArrayList();
+        userRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                InventoryList = new ArrayList<>();
+                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                    Object obj = postSnapshot.getValue();
+                    Map map = (Map) obj;
+                    if(map.get("email").equals(id)){
+                        list.add(obj);
+                    }
+
+                }
+                for(int i=0; i<list.size(); i++){
+                    Map tempData2 = ((Map)list.get(i));
+                    InventoryList.add(new InventoryData((String) tempData2.get("pillName"), (String) tempData2.get("pillInventory")));
+                }
+
+                ListView listView = (ListView)view.findViewById(R.id.InventoryList);
+                final InventoryAdapter inventoryAdapter = new InventoryAdapter(Container.getContext(),InventoryList);
+
+                listView.setAdapter(inventoryAdapter);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        /*InventoryList.add(new InventoryData("미션임파서블","15세 이상관람가"));
+        InventoryList.add(new InventoryData("아저씨","19세 이상관람가"));
+        InventoryList.add(new InventoryData("어벤져스","12세 이상관람가"));
+        */
+    }
+
+    }

@@ -37,7 +37,7 @@ import java.nio.ByteOrder;
  * Use the {@link cameraFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class cameraFragment extends Fragment {
+public class cameraFragment extends Fragment implements View.OnClickListener  {
     Button Button2;
     int imageSize = 224;
 
@@ -72,15 +72,7 @@ public class cameraFragment extends Fragment {
         return fragment;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
                          Bundle savedInstanceState) {
 
         View root = inflater.inflate(R.layout.fragment_camera, container, false);
@@ -89,13 +81,14 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
         // Inflate the layout for this fragment
     return root;
 }
-    public void onClick(View view) {
+@Override
+public void onClick(View view) {
         switch (view.getId()) {
             case R.id.Button2: {
                 // Launch camera if we have permission
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     Log.d("check2", "2");
-                    if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    if (view.getContext().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
                         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         Log.d("check3", "3");
                         startActivityForResult(cameraIntent, 1);
@@ -110,7 +103,7 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
     }
             public void classifyImage(Bitmap image){
                 try {
-                    ModelUnquant model = ModelUnquant.newInstance(getApplicationContext());
+                    ModelUnquant model = ModelUnquant.newInstance(this.getContext().getApplicationContext());
 
                     TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
                     ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3);
@@ -149,7 +142,8 @@ public View onCreateView(LayoutInflater inflater, ViewGroup container,
                     }
                     String[] classes = {"Tylenol", "Advil", "Atorvastatin", "Amoxicillin","Lisinopril"};
 
-                    Intent intent = new Intent(cameraFragment.this, PillDescription.class);
+                    Intent intent = new Intent(this.getContext(), PillDescription.class);
+
                     intent.putExtra("pill",classes[maxPos]);
                     startActivity(intent);
 
