@@ -17,6 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Propill"
         tools:targetApi="31">
+
         <activity
             android:name=".PillDescription"
             android:exported="false">
@@ -73,5 +74,9 @@
                 android:value="" />
         </activity>
     </application>
+    <uses-feature
+        android:name="android.hardware.Camera"
+        android:required="true"/>
+
 
 </manifest>

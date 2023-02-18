@@ -715,4 +715,4 @@ calendar.add(Calendar.DATE,-1);
             }
         });
     }
-    }
+}

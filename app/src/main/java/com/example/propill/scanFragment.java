@@ -33,6 +33,17 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Bundle;
+import android.provider.MediaStore;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,8 +59,13 @@ public class scanFragment extends Fragment {
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_CODE = 2;
     public static Context contextOfApplication;
-    public static Context getContextOfApplication()
-    {
+
+    private Button btn_picture;
+    private ImageView imageView;
+
+    private static final int REQUEST_IMAGE_CODE = 101;
+
+    public static Context getContextOfApplication() {
         return contextOfApplication;
     }
 
@@ -58,7 +74,6 @@ public class scanFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private Button ocr;
-    ImageView imageView;    // 갤러리에서 가져온 이미지를 보여줄 뷰
     Uri uri;                // 갤러리에서 가져온 이미지에 대한 Uri
     Bitmap bitmap;          // 갤러리에서 가져온 이미지를 담을 비트맵
     InputImage image;       // ML 모델이 인식할 인풋 이미지
@@ -98,6 +113,7 @@ public class scanFragment extends Fragment {
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -105,9 +121,13 @@ public class scanFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        view = inflater.inflate(R.layout.fragment_scan, container, false);
 
 
-        imageView = getView().findViewById(R.id.imageView);
+
+
+
+ /*       imageView = getView().findViewById(R.id.imageView);
         text_info = (TextView) view.findViewById(R.id.text_info);
         a = text_info.getText().toString();
         recognizer = TextRecognition.getClient();    //텍스트 인식에 사용될 모델
@@ -182,8 +202,10 @@ public class scanFragment extends Fragment {
                                 Log.e("텍스트 인식", "실패: " + e.getMessage());
                             }
                         });
+    }*/
+
+return view;
     }
 
 
 }
-
