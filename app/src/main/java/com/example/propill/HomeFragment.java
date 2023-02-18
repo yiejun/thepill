@@ -660,21 +660,16 @@ calendar.add(Calendar.DATE,-1);
                     if(map.get("email").equals(id) && (Boolean)map.get(selectDay)){
                         list.add(obj);
                     }
-
                 }
                 for(int i=0; i<list.size(); i++){
                     Map tempData = ((Map)list.get(i));
                     String tempTime = tempData.get("hour")+":"+tempData.get("min");
                     pillDataList.add(new SampleData(tempTime, (String) tempData.get("pillName")));
                 }
-
                 ListView listView = (ListView)view.findViewById(R.id.pilllist);
                 final MyAdapter myAdapter = new MyAdapter(container.getContext(),pillDataList);
-
                 listView.setAdapter(myAdapter);
-
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -719,10 +714,5 @@ calendar.add(Calendar.DATE,-1);
 
             }
         });
-        /*InventoryList.add(new InventoryData("미션임파서블","15세 이상관람가"));
-        InventoryList.add(new InventoryData("아저씨","19세 이상관람가"));
-        InventoryList.add(new InventoryData("어벤져스","12세 이상관람가"));
-        */
     }
-
     }

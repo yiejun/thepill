@@ -55,7 +55,7 @@ public class mainapge extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-/*        registerbutton = (ImageView) findViewById(R.id.registerbutton);
+/*       registerbutton = (ImageView) findViewById(R.id.registerbutton);
         registerbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

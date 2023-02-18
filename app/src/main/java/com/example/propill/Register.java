@@ -30,6 +30,23 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Locale;
+
 
 public class Register extends AppCompatActivity {
     long mNow;
@@ -44,6 +61,10 @@ public class Register extends AppCompatActivity {
     Boolean friFlag = false;
     Boolean satFlag = false;
     private TimePicker timePicker;
+    TextToSpeech tts;
+    EditText editText;
+    Button button;
+
     int hour,min;
     EditText pillName;
     EditText strPillinventory;
@@ -55,6 +76,41 @@ public class Register extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.regiser);
+
+        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if (status == TextToSpeech.SUCCESS) {
+                    int result = tts.setLanguage(Locale.ENGLISH);
+                    // 영어로 설정해도 한글을 읽을 수 있고 영어 발음이 한국어로 설정하는것 보다 낫다.
+                    if (result == TextToSpeech.LANG_NOT_SUPPORTED || result == TextToSpeech.LANG_MISSING_DATA) {
+                        Log.e("TTS", "Language not supported.");
+                    } else {
+                        button.setText("Ready To Speak");
+                    }
+                } else {
+                    Log.e("TTS", "Initialization failed.");
+                }
+            }
+        });
+        editText = findViewById(R.id.pillname);
+        button = (Button) findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                CharSequence text = editText.getText();
+                tts.setPitch((float)1.0); // Sets the speech pitch for the TextToSpeech engine.
+                tts.setSpeechRate((float)1.0); // Sets the speech rate.
+
+                tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "uid");
+                // QUEUE_ADD - Queue mode where the new entry is added at the end of the playback queue.
+                // QUEUE_FLUSH - Queue mode where all entries in the playback queue (media to be played
+                // and text to be synthesized) are dropped and replaced by the new entry.
+            }
+        });
+
+
+
         timePicker = findViewById(R.id.timepicker);
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
@@ -206,6 +262,18 @@ public class Register extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        if (tts != null) {
+            tts.stop();
+            // Interrupts the current utterance (whether played or rendered to file) and
+            // discards other utterances in the queue.
+            tts.shutdown();
+            // Releases the resources used by the TextToSpeech engine.
+        }
+        super.onDestroy();
+    }
     private void saveData(String pillname,String Pillinventory){
         SharedPreferences preferences = getSharedPreferences("UserInfo", MODE_PRIVATE);
         String id= preferences.getString("id", "text");
@@ -230,4 +298,5 @@ public class Register extends AppCompatActivity {
         data.put("min",min);
         userRef.push().setValue(data);
     }
+
 }

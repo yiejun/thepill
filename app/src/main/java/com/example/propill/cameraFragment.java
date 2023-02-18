@@ -81,8 +81,8 @@ public class cameraFragment extends Fragment implements View.OnClickListener  {
         // Inflate the layout for this fragment
     return root;
 }
-@Override
-public void onClick(View view) {
+    @Override
+    public void onClick(View view) {
         switch (view.getId()) {
             case R.id.Button2: {
                 // Launch camera if we have permission

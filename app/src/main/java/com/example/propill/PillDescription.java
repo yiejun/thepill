@@ -25,5 +25,7 @@ public class PillDescription extends AppCompatActivity {
                 startActivity(registerIntent);
             }
         });
+
     }
+
 }
