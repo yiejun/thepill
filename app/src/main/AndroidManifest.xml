@@ -7,6 +7,10 @@
     <uses-feature android:name="android.hardware.camera" /> <!-- Declare permissions -->
     <uses-permission android:name="android.permission.CAMERA" />
 
+    <uses-feature
+        android:name="android.hardware.Camera"
+        android:required="true" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -17,7 +21,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Propill"
         tools:targetApi="31">
-
+        <activity
+            android:name=".Ocr1"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".PillDescription"
             android:exported="false">
@@ -74,9 +84,5 @@
                 android:value="" />
         </activity>
     </application>
-    <uses-feature
-        android:name="android.hardware.Camera"
-        android:required="true"/>
-
 
 </manifest>

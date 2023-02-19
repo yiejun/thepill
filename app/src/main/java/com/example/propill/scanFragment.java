@@ -121,7 +121,55 @@ public class scanFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        view = inflater.inflate(R.layout.fragment_scan, container, false);
+        View v = inflater.inflate(R.layout.fragment_scan, container, false);
+
+        imageView = (ImageView) v.findViewById(R.id.imageView);
+
+        btn_picture = (Button) v.findViewById(R.id.btn_picture);
+        btn_picture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), Ocr1.class);
+                startActivity(intent);
+            }
+        });
+
+        /*btn_picture = (Button) v.findViewById(R.id.btn_picture);
+        btn_picture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takePicture();*//*
+            }
+        });*/
+        return v;
+    }
+/*
+    //사진찍기
+    public void takePicture(){
+
+        Intent imageTakeIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if(imageTakeIntent.resolveActivity(getActivity().getPackageManager()) != null){
+            startActivityForResult(imageTakeIntent, REQUEST_IMAGE_CODE);
+        }
+    }
+
+    //결과값 가져오기
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_IMAGE_CODE && resultCode == RESULT_OK) {
+
+            Bundle extras = data.getExtras();
+
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+            imageView.setImageBitmap(imageBitmap);
+        }
+    }*/
+
 
 
 
@@ -204,8 +252,8 @@ public class scanFragment extends Fragment {
                         });
     }*/
 
-return view;
-    }
+
+
 
 
 }
