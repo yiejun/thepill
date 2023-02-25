@@ -1,47 +1,38 @@
 package com.example.propill;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
-import android.util.SparseArray;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+
+import android.Manifest;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.Detector;
-import com.google.android.gms.vision.text.TextBlock;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
-import com.googlecode.tesseract.android.TessBaseAPI;
 
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 
 
 public class Ocr1 extends AppCompatActivity {
@@ -52,25 +43,49 @@ public class Ocr1 extends AppCompatActivity {
     Bitmap bitmap;          // 갤러리에서 가져온 이미지를 담을 비트맵
     InputImage image;       // ML 모델이 인식할 인풋 이미지
     TextView text_info;     // ML 모델이 인식한 텍스트를 보여줄 뷰
-    Button btn_get_image, btn_detection_image;  // 이미지 가져오기 버튼, 이미지 인식 버튼
+    Button pic_btn, btn_detection_image;  // 이미지 가져오기 버튼, 이미지 인식 버튼
     TextRecognizer recognizer;    //텍스트 인식에 사용될 모델
+    int imageSize = 224;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ocr1);
 
-        imageView = findViewById(R.id.imageView);
+        imageView = findViewById(R.id.imageView1234);
         text_info = findViewById(R.id.text_info);
         recognizer = TextRecognition.getClient(new TextRecognizerOptions.Builder().build());    //텍스트 인식에 사용될 모델
 
         // GET IMAGE 버튼
-        btn_get_image = findViewById(R.id.btn_get_image);
-        btn_get_image.setOnClickListener(new View.OnClickListener() {
+        pic_btn = findViewById(R.id.pic_btn);
+        Intent intent = getIntent();
+        if(intent.hasExtra("image")) {
+            Log.d("imageView","load");
+            imageView.setImageBitmap((Bitmap) intent.getExtras().get("image"));
+        }
+
+
+        pic_btn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    Log.d("check2", "2");
+                    if (view.getContext().checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        Log.d("check3", "3");
+                        startActivityForResult(cameraIntent, 1);
+
+                    } else {
+                        //Request camera permission if we don't have it.
+                        Log.d("check", "1");
+                        requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
+                    }
+                }
+
+
+                /*
                 Intent intent = new Intent(Intent.ACTION_PICK);
                 intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                startActivityForResult(intent, REQUEST_CODE);
+                startActivityForResult(intent, REQUEST_CODE);*/
             }
         });
 
@@ -78,7 +93,7 @@ public class Ocr1 extends AppCompatActivity {
         btn_detection_image = findViewById(R.id.btn_detection_image);
         btn_detection_image.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View view) {
                 TextRecognition(recognizer);
             }
         });
@@ -87,19 +102,25 @@ public class Ocr1 extends AppCompatActivity {
     }
 
     @Override
-    protected  void onActivityResult(int requestCode, int resultCode, Intent data){
-        super.onActivityResult(requestCode,resultCode,data);
-        if (requestCode == REQUEST_CODE) {
-            // 갤러리에서 선택한 사진에 대한 uri를 가져온다.
-            uri = data.getData();
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            Log.d("asdfd", "asdfdffsad");
+            Bitmap image = (Bitmap) data.getExtras().get("data");
+            int dimension = Math.min(image.getWidth(), image.getHeight());
+            image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
+            image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
+            Intent intent2 = new Intent(Ocr1.this, Ocr1.class);
+            intent2.putExtra("image", image);
+            startActivity(intent2);
 
-            setImage(uri);
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     // uri를 비트맵으로 변환시킨후 이미지뷰에 띄워주고 InputImage를 생성하는 메서드
     private void setImage(Uri uri) {
         try{
+
             InputStream in = getContentResolver().openInputStream(uri);
             bitmap = BitmapFactory.decodeStream(in);
             imageView.setImageBitmap(bitmap);
@@ -132,9 +153,11 @@ public class Ocr1 extends AppCompatActivity {
                             }
                         });
     }
-}
 
-/*    private SurfaceView surfaceView;
+
+}
+/*
+    private SurfaceView surfaceView;
     private TextView textView;
     private CameraSource cameraSource;
     private static final int PERMISSION = 100;
@@ -145,8 +168,8 @@ public class Ocr1 extends AppCompatActivity {
         super.onCreate(savedInstance);
         setContentView(R.layout.activity_ocr1);
 
-        surfaceView = findViewById(R.id.camera);
-        textView = findViewById(R.id.text1);
+        surfaceView = findViewById(R.id.ocr1_camera);
+        textView = findViewById(R.id.ocr1_text1);
 
         startCameraSource();
 
@@ -155,7 +178,7 @@ public class Ocr1 extends AppCompatActivity {
     private void startCameraSource() {
         final TextRecognizer textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
 
-        if(!textRecognizer.isOperational()) {
+        if(false *//*!textRecognizer.isOperational()*//*) {
             Log.w("Tag", "Dependencies not loaded yet");
         }else{
             cameraSource = new CameraSource.Builder(getApplicationContext(), textRecognizer)

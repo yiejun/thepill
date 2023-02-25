@@ -92,6 +92,7 @@ public class cameraFragment extends Fragment implements View.OnClickListener  {
                         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         Log.d("check3", "3");
                         startActivityForResult(cameraIntent, 1);
+
                     } else {
                         //Request camera permission if we don't have it.
                         Log.d("check", "1");
@@ -142,10 +143,11 @@ public class cameraFragment extends Fragment implements View.OnClickListener  {
                     }
                     String[] classes = {"Tylenol", "Advil", "Atorvastatin", "Amoxicillin","Lisinopril"};
 
-                    Intent intent = new Intent(this.getContext(), PillDescription.class);
+                    Intent intent1 = new Intent(this.getContext(), PillDescription.class);
 
-                    intent.putExtra("pill",classes[maxPos]);
-                    startActivity(intent);
+                    intent1.putExtra("pill",classes[maxPos]);
+                    /*intent.putExtra("image", image);*/
+                    startActivity(intent1);
 
                     model.close();
                 } catch (IOException e) {
@@ -162,6 +164,7 @@ public class cameraFragment extends Fragment implements View.OnClickListener  {
                     image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
                     image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
                     classifyImage(image);
+
                 }
                 super.onActivityResult(requestCode, resultCode, data);
             }

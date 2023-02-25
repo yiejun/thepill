@@ -1,48 +1,22 @@
 package com.example.propill;
 
-import static android.app.Activity.RESULT_OK;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.mlkit.vision.common.InputImage;
-import com.google.mlkit.vision.text.Text;
-import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
-
-import org.checkerframework.checker.nullness.qual.NonNull;
-
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 
 
 /**
@@ -123,7 +97,7 @@ public class scanFragment extends Fragment {
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_scan, container, false);
 
-        imageView = (ImageView) v.findViewById(R.id.imageView);
+        imageView = (ImageView) v.findViewById(R.id.imageView1234);
 
         btn_picture = (Button) v.findViewById(R.id.btn_picture);
         btn_picture.setOnClickListener(new View.OnClickListener() {
