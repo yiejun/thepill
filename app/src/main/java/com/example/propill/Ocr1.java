@@ -1,5 +1,7 @@
 package com.example.propill;
 
+import static java.lang.System.in;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -54,13 +56,16 @@ public class Ocr1 extends AppCompatActivity {
         imageView = findViewById(R.id.imageView1234);
         text_info = findViewById(R.id.text_info);
         recognizer = TextRecognition.getClient(new TextRecognizerOptions.Builder().build());    //텍스트 인식에 사용될 모델
-
+        Log.d("redog","bla");
         // GET IMAGE 버튼
         pic_btn = findViewById(R.id.pic_btn);
         Intent intent = getIntent();
         if(intent.hasExtra("image")) {
             Log.d("imageView","load");
-            imageView.setImageBitmap((Bitmap) intent.getExtras().get("image"));
+            Bitmap tmpimage = (Bitmap) intent.getExtras().get("image");
+            imageView.setImageBitmap(tmpimage);
+            this.image = InputImage.fromBitmap(tmpimage, 0);
+            if(image == null) Log.d("image","no");
         }
 
 
@@ -94,6 +99,7 @@ public class Ocr1 extends AppCompatActivity {
         btn_detection_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.d("111","34");
                 TextRecognition(recognizer);
             }
         });
@@ -113,23 +119,17 @@ public class Ocr1 extends AppCompatActivity {
             intent2.putExtra("image", image);
             startActivity(intent2);
 
+
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
     // uri를 비트맵으로 변환시킨후 이미지뷰에 띄워주고 InputImage를 생성하는 메서드
-    private void setImage(Uri uri) {
-        try{
-
-            InputStream in = getContentResolver().openInputStream(uri);
-            bitmap = BitmapFactory.decodeStream(in);
+    private void setImage(Bitmap bitmap) {
             imageView.setImageBitmap(bitmap);
 
             image = InputImage.fromBitmap(bitmap, 0);
             Log.e("setImage", "이미지 to 비트맵");
-        } catch (FileNotFoundException e){
-            e.printStackTrace();
-        }
     }
 
     private void TextRecognition(TextRecognizer recognizer){
