@@ -127,7 +127,7 @@ public class scanFragment extends Fragment {
         super.onCreate(savedInstanceState);
         View v = inflater.inflate(R.layout.fragment_scan, container, false);
 
-        imageView = (ImageView) v.findViewById(R.id.imageView1234);
+
 
         btn_picture = (Button) v.findViewById(R.id.btn_picture);
         btn_picture.setOnClickListener(new View.OnClickListener() {

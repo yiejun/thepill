@@ -45,9 +45,11 @@ public class Ocr1 extends AppCompatActivity {
     Bitmap bitmap;          // 갤러리에서 가져온 이미지를 담을 비트맵
     InputImage image;       // ML 모델이 인식할 인풋 이미지
     TextView text_info;     // ML 모델이 인식한 텍스트를 보여줄 뷰
-    Button pic_btn, btn_detection_image;  // 이미지 가져오기 버튼, 이미지 인식 버튼
+    Button pic_btn, btn_detection_image, Button_add;  // 이미지 가져오기 버튼, 이미지 인식 버튼
     TextRecognizer recognizer;    //텍스트 인식에 사용될 모델
     int imageSize = 224;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +70,14 @@ public class Ocr1 extends AppCompatActivity {
             if(image == null) Log.d("image","no");
         }
 
+        Button_add = findViewById(R.id.Button_add);
+        Button_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Ocr1.this,ChatGpt.class);
+                startActivity(intent);
+            }
+        });
 
         pic_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,6 +163,7 @@ public class Ocr1 extends AppCompatActivity {
                             }
                         });
     }
+
 
 
 }

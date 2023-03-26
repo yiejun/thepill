@@ -22,6 +22,7 @@ import android.widget.Button;
 import androidx.annotation.Nullable;
 
 import android.media.ThumbnailUtils;
+import android.widget.ImageView;
 
 import com.example.propill.ml.ModelUnquant;
 
@@ -40,6 +41,7 @@ import java.nio.ByteOrder;
 public class cameraFragment extends Fragment implements View.OnClickListener  {
     Button Button2;
     int imageSize = 224;
+    ImageView camera;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -78,6 +80,7 @@ public class cameraFragment extends Fragment implements View.OnClickListener  {
         View root = inflater.inflate(R.layout.fragment_camera, container, false);
         Button2 = root.findViewById(R.id.Button2);
         Button2.setOnClickListener((View.OnClickListener) this);
+
         // Inflate the layout for this fragment
     return root;
 }

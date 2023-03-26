@@ -6,6 +6,7 @@
     <dist:module dist:instant="true" /> <!-- Declare features -->
     <uses-feature android:name="android.hardware.camera" /> <!-- Declare permissions -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature
         android:name="android.hardware.Camera"
@@ -21,6 +22,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Propill"
         tools:targetApi="31">
+        <activity
+            android:name=".ChatGpt"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".Ocr1"
             android:exported="false">
@@ -83,9 +91,10 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <meta-data
             android:name="com.google.firebase.ml.vision.DEPENDENCIES"
             android:value="ocr" />
-        <!-- To use multiple models: android:value="ocr,model2,model3" -->
     </application>
+
 </manifest>
