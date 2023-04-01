@@ -1,7 +1,6 @@
 package com.example.propill;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.os.Message;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,7 +13,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 
-
+import okhttp3.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Body;
@@ -71,23 +70,103 @@ public class ChatGpt extends AppCompatActivity {
     TextView welcomeTextView;
     EditText messageEditText;
     ImageButton sendButton;
+    List<Message> messageList;
+    MessageAdapter messageAdapter;
+    public static final MediaType JSON
+            = MediaType.get("application/json; charset=utf-8");
+    OkHttpClient client = new OkHttpClient();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_gpt2);
+        messageList = new ArrayList<>();
+
 
         recyclerView = findViewById(R.id.recycler_view);
         welcomeTextView = findViewById(R.id.welcome_text);
         messageEditText = findViewById(R.id.message_edit_text);
         sendButton = findViewById(R.id.send_btn);
 
-        sendButton.setOnClickListener((v)->{
-            String question = messageEditText.getText().toString().trim();
-            Toast.makeText(this,question,Toast.LENGTH_LONG).show();
-    });
+        messageAdapter = new MessageAdapter(messageList);
+        recyclerView.setAdapter(messageAdapter);
+        LinearLayoutManager llm = new LinearLayoutManager(this);
+        llm.setStackFromEnd(true);
+        recyclerView.setLayoutManager(llm);
 
-}
+
+        sendButton.setOnClickListener((v) -> {
+            String question = messageEditText.getText().toString().trim();
+            addToChat(question,Message.SENT_BY_ME);
+            messageEditText.setText("");
+            callAPI(question);
+            welcomeTextView.setVisibility(View.GONE);
+
+        });
+    }
+    void addToChat(String message,String sentBy){
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                messageList.add(new Message(message,sentBy));
+                messageAdapter.notifyDataSetChanged();
+                recyclerView.smoothScrollToPosition(messageAdapter.getItemCount());
+            }
+        });
+    }
+    void addResponse(String response){
+        messageList.remove(messageList.size()-1);
+        addToChat(response,Message.SENT_BY_BOT);
+    }
+
+    void callAPI(String question){
+        messageList.add(new Message("Typing... ",Message.SENT_BY_BOT));
+
+        JSONObject jsonBody = new JSONObject();
+        try {
+            jsonBody.put("model","text-davinci-003");
+            jsonBody.put("prompt",question);
+            jsonBody.put("max_tokens",4000);
+            jsonBody.put("temperature",0);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        RequestBody body = RequestBody.create(jsonBody.toString(),JSON);
+        Request request = new Request.Builder()
+                .url("https://api.openai.com/v1/completions")
+                .header("Authorization","Bearer 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")
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if(response.isSuccessful()){
+                    JSONObject  jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(response.body().string());
+                        JSONArray jsonArray = jsonObject.getJSONArray("choices");
+                        String result = jsonArray.getJSONObject(0).getString("text");
+                        addResponse(result.trim());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }else{
+                    addResponse("Failed to load response due to "+response.body().toString());
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                addResponse("Failed to load response due to "+e.getMessage());
+            }
+        });
+    }
+
+
+
+    }
 
 
 /*    public class CompletionRequest {
@@ -196,7 +275,7 @@ public class ChatGpt extends AppCompatActivity {
            return retrofit;
        }
    }*/
-}
+
 /*    public interface OpenAIInterface {
        @Headers("Content-Type: application/json")
        @POST("completions")
