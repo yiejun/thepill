@@ -104,6 +104,10 @@ public class ChatGpt extends AppCompatActivity {
             welcomeTextView.setVisibility(View.GONE);
 
         });
+        String text = getIntent().getStringExtra("text");
+        messageEditText.setText(text);
+
+
     }
     void addToChat(String message,String sentBy){
         runOnUiThread(new Runnable() {
@@ -135,7 +139,7 @@ public class ChatGpt extends AppCompatActivity {
         RequestBody body = RequestBody.create(jsonBody.toString(),JSON);
         Request request = new Request.Builder()
                 .url("https://api.openai.com/v1/completions")
-                .header("Authorization","Bearer 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")
+                .header("Authorization","Bearer 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")
                 .post(body)
                 .build();
 

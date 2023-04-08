@@ -74,7 +74,10 @@ public class Ocr1 extends AppCompatActivity {
         Button_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String text = text_info.getText().toString();
+
                 Intent intent = new Intent(Ocr1.this,ChatGpt.class);
+                intent.putExtra("text", text);
                 startActivity(intent);
             }
         });
