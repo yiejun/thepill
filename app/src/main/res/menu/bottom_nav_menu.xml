@@ -5,7 +5,7 @@
         android:icon="@drawable/ic_baseline_home_24"
         android:id="@+id/Home"/>
     <item android:title="Camera"
-        android:icon="@drawable/propillcamera"
+        android:icon="@drawable/propillcameraimage"
         android:id="@+id/Camera"/>
     <item android:title="Scan"
         android:icon="@drawable/ocrpropill"

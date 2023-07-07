@@ -20,8 +20,10 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:text="Introducing ChatGPT"
-        android:textSize="20sp" />
+        android:text="ChatGPT"
+        android:textColor="#3652a3"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
 
 
@@ -31,16 +33,19 @@
         android:layout_alignParentBottom="true"
         android:id="@+id/bottom_layout">
 
+
         <EditText
             android:id="@+id/message_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:layout_marginLeft="10dp"
             android:layout_toLeftOf="@id/send_btn"
-            android:background="@drawable/rounded_corner"
+            android:background="@drawable/pill_description_whitebutton"
             android:color="#3652a3"
-            android:hint="Write here"
-            android:padding="16dp" />
+            android:hint="Send a message"
+            android:padding="16dp"
+            android:textColor="#3652a3" />
 
         <ImageButton
             android:id="@+id/send_btn"
@@ -49,7 +54,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerInParent="true"
             android:layout_marginStart="10dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_send" />
+            android:layout_marginRight="10dp"
+            android:background="@drawable/ic_sendchatgpt" />
     </RelativeLayout>
 </RelativeLayout>

@@ -6,6 +6,7 @@ import static androidx.core.content.ContextCompat.checkSelfPermission;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 
 import androidx.annotation.Nullable;
@@ -25,6 +27,7 @@ import android.media.ThumbnailUtils;
 import android.widget.ImageView;
 
 import com.example.propill.ml.ModelUnquant;
+import com.example.propill.ml.PoscoModel;
 
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
@@ -77,6 +80,14 @@ public class cameraFragment extends Fragment implements View.OnClickListener  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                          Bundle savedInstanceState) {
 
+        Window window = getActivity().getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String hexCode = "#ffffff";
+            int redColor = Color.parseColor(hexCode);
+
+            window.setStatusBarColor(redColor);
+        }
+
         View root = inflater.inflate(R.layout.fragment_camera, container, false);
         Button2 = root.findViewById(R.id.Button2);
         Button2.setOnClickListener((View.OnClickListener) this);
@@ -107,7 +118,7 @@ public class cameraFragment extends Fragment implements View.OnClickListener  {
     }
             public void classifyImage(Bitmap image){
                 try {
-                    ModelUnquant model = ModelUnquant.newInstance(this.getContext().getApplicationContext());
+                    PoscoModel model = PoscoModel.newInstance(this.getContext().getApplicationContext());
 
                     TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
                     ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3);
@@ -131,7 +142,7 @@ public class cameraFragment extends Fragment implements View.OnClickListener  {
 
                     inputFeature0.loadBuffer(byteBuffer);
 
-                    ModelUnquant.Outputs outputs = model.process(inputFeature0);
+                    PoscoModel.Outputs outputs = model.process(inputFeature0);
                     TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
 
                     float[] confidences = outputFeature0.getFloatArray();
@@ -144,7 +155,7 @@ public class cameraFragment extends Fragment implements View.OnClickListener  {
                             maxPos = i;
                         }
                     }
-                    String[] classes = {"Tylenol", "Advil", "Atorvastatin", "Amoxicillin","Lisinopril"};
+                    String[] classes = {"양파", "소고기", "비트", "로메인","당근"};
 
                     Intent intent1 = new Intent(this.getContext(), PillDescription.class);
 
@@ -158,7 +169,6 @@ public class cameraFragment extends Fragment implements View.OnClickListener  {
                 }
             }
 
-
             @Override
             public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
                 if (requestCode == 1 && resultCode == RESULT_OK) {
@@ -167,8 +177,7 @@ public class cameraFragment extends Fragment implements View.OnClickListener  {
                     image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
                     image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
                     classifyImage(image);
-
                 }
                 super.onActivityResult(requestCode, resultCode, data);
-            }
-        }
+    }
+}

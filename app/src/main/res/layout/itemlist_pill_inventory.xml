@@ -14,7 +14,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textColor="#3652a3"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/itemPillInventory"
@@ -23,7 +25,8 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="TextView" />
+            android:text="TextView"
+            android:textColor="#3652a3" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

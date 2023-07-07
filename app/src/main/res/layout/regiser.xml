@@ -17,9 +17,10 @@
             android:layout_height="223dp"
             android:timePickerMode="spinner" />
 
+<!--
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="134dp"
+            android:layout_height="112dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:orientation="horizontal">
@@ -30,9 +31,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="#eff1ff"
+                android:outlineProvider="none"
                 android:text="Sun"
-                android:textAllCaps="false"
-                android:outlineProvider="none"/>
+                android:textAllCaps="false" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/monBtn"
@@ -94,12 +95,20 @@
                 android:text="Sat"
                 android:textAllCaps="false" />
         </LinearLayout>
+-->
 
         <Button
             android:id="@+id/button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/pill_description_button_shape"
+            android:backgroundTint="#3652a3"
+            android:text="소리로 약 이름 듣기"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textView5"

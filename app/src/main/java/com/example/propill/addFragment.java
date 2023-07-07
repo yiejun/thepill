@@ -1,5 +1,7 @@
 package com.example.propill;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,6 +51,13 @@ public class addFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Window window = getActivity().getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String hexCode = "#ffffff";
+            int redColor = Color.parseColor(hexCode);
+
+            window.setStatusBarColor(redColor);
+        }
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);

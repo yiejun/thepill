@@ -3,11 +3,17 @@ package com.example.propill;
 import static android.content.Context.MODE_PRIVATE;
 import static androidx.core.content.ContextCompat.checkSelfPermission;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
+import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -27,6 +33,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -51,23 +58,22 @@ import java.nio.ByteOrder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HomeFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
+    public static final String NOTIFICATION_CHANNEL_ID = "1001";
+    private CharSequence channelName = "노티피케이션 채널";
+    private String description = "해당 채널에 대한 설명";
+    private int importance = NotificationManager.IMPORTANCE_HIGH;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -89,13 +95,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference userRef = database.getReference("users");
 
-
     ArrayList<SampleData> pillDataList;
     ArrayList<InventoryData> InventoryList;
     public HomeFragment() {
         // Required empty public constructor
     }
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -114,10 +118,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         return fragment;
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Window window = getActivity().getWindow();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String hexCode = "#eff1ff";
+            int redColor = Color.parseColor(hexCode);
+
+            window.setStatusBarColor(redColor);
+        }
 
         view = inflater.inflate(R.layout.fragment_home, container, false);
         registerbutton = (ImageView) view.findViewById(R.id.registerbutton);
@@ -129,15 +139,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         mDate = Calendar.getInstance().getTime();
         SimpleDateFormat format = new SimpleDateFormat("dd", Locale.getDefault());  // 2월 15일
 
-        //오늘 일자
+        //date of today
         String todayDate = format.format(mDate);
 
         //today
         Date currentDate = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(currentDate);
-
         int dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
+
         if(dayOfWeekNumber == 1){
             strDay = "sun";
         }
@@ -166,7 +176,7 @@ Button4.setText(todayDate + "\n" +strDay);
 
 calendar.add(Calendar.DATE,-1);
         mDate = calendar.getTime();
-        //오늘 일자
+        //date of today
         String yesterDate = format.format(mDate);
         dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
         if(dayOfWeekNumber == 1){
@@ -191,12 +201,14 @@ calendar.add(Calendar.DATE,-1);
             strDay = "Sat";
         }
 
+
         Button3 = view.findViewById(R.id.button3);
         Button3.setText(yesterDate + "\n" +strDay);
 
         calendar.add(Calendar.DATE,-1);
         mDate = calendar.getTime();
-        //오늘 일자
+
+        //date of today
         String dayDate = format.format(mDate);
         dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
         if(dayOfWeekNumber == 1){
@@ -221,12 +233,14 @@ calendar.add(Calendar.DATE,-1);
             strDay = "Sat";
         }
 
+
         Button2 = view.findViewById(R.id.button2);
         Button2.setText(dayDate + "\n" +strDay);
 
         calendar.add(Calendar.DATE,+3);
         mDate = calendar.getTime();
-        //오늘 일자
+
+        //date of today
         String plusDate = format.format(mDate);
         dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
         if(dayOfWeekNumber == 1){
@@ -251,12 +265,14 @@ calendar.add(Calendar.DATE,-1);
             strDay = "Sat";
         }
 
+
         Button5 = view.findViewById(R.id.button5);
         Button5.setText(plusDate + "\n" +strDay);
 
         calendar.add(Calendar.DATE,+1);
         mDate = calendar.getTime();
-        //오늘 일자
+
+        //date of today
         String plusplusDate = format.format(mDate);
         dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
         if(dayOfWeekNumber == 1){
@@ -281,18 +297,22 @@ calendar.add(Calendar.DATE,-1);
             strDay = "Sat";
         }
 
+
         Button6 = view.findViewById(R.id.button6);
         Button6.setText(plusplusDate + "\n" +strDay);
 
+
+        GradientDrawable gradientDrawable2 = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
+        gradientDrawable2.setColor(Color.rgb(54,82,163));
+        Button4.setBackground(gradientDrawable2);
+        Button4.setTextColor(Color.WHITE);
         Button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 GradientDrawable gradientDrawable = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
                 gradientDrawable.setColor(Color.WHITE);
-
                 Button3.setBackground(gradientDrawable);
                 Button3.setTextColor(Color.rgb(54, 82, 163));
-
                 Button2.setBackground(gradientDrawable);
                 Button2.setTextColor(Color.rgb(54, 82, 163));
                 Button5.setBackground(gradientDrawable);
@@ -304,12 +324,10 @@ calendar.add(Calendar.DATE,-1);
                 gradientDrawable2.setColor(Color.rgb(54,82,163));
                 Button4.setBackground(gradientDrawable2);
                 Button4.setTextColor(Color.WHITE);
-
                 //today
                 Date currentDate = new Date();
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTime(currentDate);
-
                 int dayOfWeekNumber = calendar.get(Calendar.DAY_OF_WEEK);
                 if(dayOfWeekNumber == 1){
                     selectDay = "sun";
@@ -335,22 +353,21 @@ calendar.add(Calendar.DATE,-1);
                 InitializeMovieData(container);
             }
         });
+
         Button5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //color setting when buttons are clicked on mainpage
                 GradientDrawable gradientDrawable = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
                 gradientDrawable.setColor(Color.WHITE);
-
                 Button3.setBackground(gradientDrawable);
                 Button3.setTextColor(Color.rgb(54, 82, 163));
-
                 Button4.setBackground(gradientDrawable);
                 Button4.setTextColor(Color.rgb(54, 82, 163));
                 Button2.setBackground(gradientDrawable);
                 Button2.setTextColor(Color.rgb(54, 82, 163));
                 Button6.setBackground(gradientDrawable);
                 Button6.setTextColor(Color.rgb(54, 82, 163));
-
                 GradientDrawable gradientDrawable2 = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
                 gradientDrawable2.setColor(Color.rgb(54,82,163));
                 Button5.setBackground(gradientDrawable2);
@@ -390,19 +407,17 @@ calendar.add(Calendar.DATE,-1);
         Button6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //color setting when buttons are clicked on mainpage
                 GradientDrawable gradientDrawable = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
                 gradientDrawable.setColor(Color.WHITE);
-
                 Button3.setBackground(gradientDrawable);
                 Button3.setTextColor(Color.rgb(54, 82, 163));
-
                 Button4.setBackground(gradientDrawable);
                 Button4.setTextColor(Color.rgb(54, 82, 163));
                 Button5.setBackground(gradientDrawable);
                 Button5.setTextColor(Color.rgb(54, 82, 163));
                 Button2.setBackground(gradientDrawable);
                 Button2.setTextColor(Color.rgb(54, 82, 163));
-
                 GradientDrawable gradientDrawable2 = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
                 gradientDrawable2.setColor(Color.rgb(54,82,163));
                 Button6.setBackground(gradientDrawable2);
@@ -442,19 +457,17 @@ calendar.add(Calendar.DATE,-1);
         Button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //color setting when buttons are clicked on mainpage
                 GradientDrawable gradientDrawable = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
                 gradientDrawable.setColor(Color.WHITE);
-
                 Button3.setBackground(gradientDrawable);
                 Button3.setTextColor(Color.rgb(54, 82, 163));
-
                 Button4.setBackground(gradientDrawable);
                 Button4.setTextColor(Color.rgb(54, 82, 163));
                 Button5.setBackground(gradientDrawable);
                 Button5.setTextColor(Color.rgb(54, 82, 163));
                 Button6.setBackground(gradientDrawable);
                 Button6.setTextColor(Color.rgb(54, 82, 163));
-
                 GradientDrawable gradientDrawable2 = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
                 gradientDrawable2.setColor(Color.rgb(54,82,163));
                 Button2.setBackground(gradientDrawable2);
@@ -493,9 +506,9 @@ calendar.add(Calendar.DATE,-1);
         Button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //color setting when buttons are clicked on mainpage
                 GradientDrawable gradientDrawable = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
                 gradientDrawable.setColor(Color.WHITE);
-
                 Button2.setBackground(gradientDrawable);
                 Button2.setTextColor(Color.rgb(54, 82, 163));
                 Button4.setBackground(gradientDrawable);
@@ -504,7 +517,6 @@ calendar.add(Calendar.DATE,-1);
                 Button5.setTextColor(Color.rgb(54, 82, 163));
                 Button6.setBackground(gradientDrawable);
                 Button6.setTextColor(Color.rgb(54, 82, 163));
-
                 GradientDrawable gradientDrawable2 = (GradientDrawable)ContextCompat.getDrawable(container.getContext(),R.drawable.mainpageweekbutton);
                 gradientDrawable2.setColor(Color.rgb(54,82,163));
                 Button3.setBackground(gradientDrawable2);
@@ -542,149 +554,102 @@ calendar.add(Calendar.DATE,-1);
             }
         });
 
-
-
-       /* Button2 = (R.id.button2);
-
-        Button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // Launch camera if we have permission
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    Log.d("check2", "2");
-                    if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
-                        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        Log.d("check3", "3");
-                        startActivityForResult(cameraIntent, 1);
-                    } else {
-                        //Request camera permission if we don't have it.
-                        Log.d("check", "1");
-                        requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
-                    }
-                }
-            }
-        });
-*/
-
-
-        // Inflate the layout for this fragment
         return view;
-
     }
-
     @Override
     public void onClick(View v){
         Intent intent = new Intent(getActivity(),Register.class);
         startActivity(intent);
     }
 
-
-
-/*    public void classifyImage(Bitmap image){
-        try {
-            ModelUnquant model = ModelUnquant.newInstance(getApplicationContext());
-
-            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
-            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3);
-            inputFeature0.loadBuffer(byteBuffer);
-            byteBuffer.order(ByteOrder.nativeOrder());
-
-            // get 1D array of 224 * 224 pixels in image
-            int [] intValues = new int[imageSize * imageSize];
-            image.getPixels(intValues, 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight());
-
-            // iterate over pixels and extract R, G, and B values. Add to bytebuffer.
-            int pixel = 0;
-            for(int i = 0; i < imageSize; i++){
-                for(int j = 0; j < imageSize; j++){
-                    int val = intValues[pixel++]; // RGB
-                    byteBuffer.putFloat(((val >> 16) & 0xFF) * (1.f / 255.f));
-                    byteBuffer.putFloat(((val >> 8) & 0xFF) * (1.f / 255.f));
-                    byteBuffer.putFloat((val & 0xFF) * (1.f / 255.f));
-                }
-            }
-
-            inputFeature0.loadBuffer(byteBuffer);
-
-            ModelUnquant.Outputs outputs = model.process(inputFeature0);
-            TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
-
-            float[] confidences = outputFeature0.getFloatArray();
-            // find the index of the class with the biggest confidence.
-            int maxPos = 0;
-            float maxConfidence = 0;
-            for(int i = 0; i < confidences.length; i++){
-                if(confidences[i] > maxConfidence){
-                    maxConfidence = confidences[i];
-                    maxPos = i;
-                }
-            }
-            String[] classes = {"Tylenol", "Advil", "Atorvastatin", "Amoxicillin","Lisinopril"};
-
-            Intent intent = new Intent(mainapge.this, PillDescription.class);
-            intent.putExtra("pill",classes[maxPos]);
-            startActivity(intent);
-
-            model.close();
-        } catch (IOException e) {
-            // TODO Handle the exception
-        }
-    }*/
-
-
-/*    @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == 1 && resultCode == RESULT_OK) {
-            Bitmap image = (Bitmap) data.getExtras().get("data");
-            int dimension = Math.min(image.getWidth(), image.getHeight());
-            image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
-            image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
-            classifyImage(image);
-        }
-        super.onActivityResult(requestCode, resultCode, data);
-    }*/
-
-    public void InitializeMovieData(ViewGroup container)
-    {
+    public void InitializeMovieData(ViewGroup container) {
         pillDataList = new ArrayList<SampleData>();
         SharedPreferences preferences = this.getActivity().getSharedPreferences("UserInfo", MODE_PRIVATE);
-        String id= preferences.getString("id", "text");
+        String id = preferences.getString("id", "text");
+
 
         List list = new ArrayList();
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 pillDataList = new ArrayList<>();
-                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     Object obj = postSnapshot.getValue();
                     Map map = (Map) obj;
-                    if(map.get("email").equals(id) && (Boolean)map.get(selectDay)){
+                    if (map.get("email").equals(id) && (Boolean) map.get(selectDay)) {
                         list.add(obj);
                     }
                 }
-                for(int i=0; i<list.size(); i++){
-                    Map tempData = ((Map)list.get(i));
-                    String tempTime = tempData.get("hour")+":"+tempData.get("min");
+                for (int i = 0; i < list.size(); i++) {
+                    Map tempData = ((Map) list.get(i));
+                    String tempTime = tempData.get("hour") + ":" + tempData.get("min");
                     pillDataList.add(new SampleData(tempTime, (String) tempData.get("pillName")));
                 }
-                ListView listView = (ListView)view.findViewById(R.id.pilllist);
-                final MyAdapter myAdapter = new MyAdapter(container.getContext(),pillDataList);
+                /*Collections.sort(pillDataList, new pillListComparator());*/
+                ListView listView = (ListView) view.findViewById(R.id.pilllist);
+                final MyAdapter myAdapter = new MyAdapter(container.getContext(), pillDataList);
                 listView.setAdapter(myAdapter);
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
+
         });
 
+        // Set the desired time for the notification
+        int targetHour = 15;
+        int targetMinute = 5;
 
+        // Create a Calendar instance for the desired time
+        Calendar targetTime = Calendar.getInstance();
+        targetTime.set(Calendar.HOUR_OF_DAY, targetHour);
+        targetTime.set(Calendar.MINUTE, targetMinute);
+        targetTime.set(Calendar.SECOND, 0);
+        targetTime.set(Calendar.MILLISECOND, 0);
+
+        Intent notificationIntent = new Intent(getContext(), HomeFragment.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(getContext(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+
+        // Get the AlarmManager instance
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+
+        // Set the notification to trigger at the specified time
+        if (alarmManager != null) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, targetTime.getTimeInMillis(), pendingIntent);
+        }
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(getContext(), NOTIFICATION_CHANNEL_ID)
+                .setContentTitle("TITLE")
+                .setContentText("TEXT")
+                .setSmallIcon(R.drawable.propill_logo)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setWhen(System.currentTimeMillis())
+                .setAutoCancel(true);
+
+        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            CharSequence channelName = "노티피케이션 채널";
+            String description = "해당 채널에 대한 설명";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+
+            NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, channelName, importance);
+            channel.setDescription(description);
+            assert notificationManager != null;
+            notificationManager.createNotificationChannel(channel);
+        }
+        notificationManager.notify(1234, builder.build());
     }
+
+
+
 
     public void InitializeInventoryData(ViewGroup Container){
         InventoryList = new ArrayList<InventoryData>();
         SharedPreferences preferences = this.getActivity().getSharedPreferences("UserInfo", MODE_PRIVATE);
         String id= preferences.getString("id", "text");
-
         List list = new ArrayList();
         userRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -696,24 +661,40 @@ calendar.add(Calendar.DATE,-1);
                     if(map.get("email").equals(id)){
                         list.add(obj);
                     }
-
                 }
                 for(int i=0; i<list.size(); i++){
                     Map tempData2 = ((Map)list.get(i));
                     InventoryList.add(new InventoryData((String) tempData2.get("pillName"), (String) tempData2.get("pillInventory")));
                 }
-
-                ListView listView = (ListView)view.findViewById(R.id.InventoryList);
+                ListView listViewsts = (ListView)view.findViewById(R.id.InventoryList);
                 final InventoryAdapter inventoryAdapter = new InventoryAdapter(Container.getContext(),InventoryList);
-
-                listView.setAdapter(inventoryAdapter);
-
+                listViewsts.setAdapter(inventoryAdapter);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }
+
 }
+/*
+
+class pillListComparator implements Comparator<SampleData> {
+    @Override
+    public int compare(SampleData a, SampleData b){
+        int ta = 0;
+        String[] tal = a.getTime().split(":");
+        ta += Integer.parseInt(tal[0])*60 + Integer.parseInt(tal[1]);
+        int tb = 0;
+        String[] tbl = b.getTime().split(":");
+        tb += Integer.parseInt(tbl[0])*60 + Integer.parseInt(tbl[1]);
+        if(ta > tb){
+            return 1;
+        } else if(ta < tb){
+            return -1;
+        } else{
+            return 0;
+        }
+    }
+}
+*/

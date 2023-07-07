@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Build;
@@ -35,6 +36,8 @@ import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Ocr1 extends AppCompatActivity {
@@ -53,14 +56,20 @@ public class Ocr1 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ocr1);
 
+        setContentView(R.layout.activity_ocr1);
+    }
+}
+/*
         imageView = findViewById(R.id.imageView1234);
         text_info = findViewById(R.id.text_info);
+
+
         recognizer = TextRecognition.getClient(new TextRecognizerOptions.Builder().build());    //텍스트 인식에 사용될 모델
         Log.d("redog","bla");
+
         // GET IMAGE 버튼
-        pic_btn = findViewById(R.id.pic_btn);
+      pic_btn = findViewById(R.id.pic_btn);
         Intent intent = getIntent();
         if(intent.hasExtra("image")) {
             Log.d("imageView","load");
@@ -69,19 +78,20 @@ public class Ocr1 extends AppCompatActivity {
             this.image = InputImage.fromBitmap(tmpimage, 0);
             if(image == null) Log.d("image","no");
         }
-
         Button_add = findViewById(R.id.Button_add);
         Button_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String text = text_info.getText().toString();
+                ArrayList<String> list = new ArrayList<String>();
+                list.add(text);
+                list.add("ocr");
 
                 Intent intent = new Intent(Ocr1.this,ChatGpt.class);
-                intent.putExtra("text", text);
+                intent.putStringArrayListExtra("list", list);
                 startActivity(intent);
             }
         });
-
         pic_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,39 +101,26 @@ public class Ocr1 extends AppCompatActivity {
                         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         Log.d("check3", "3");
                         startActivityForResult(cameraIntent, 1);
-
                     } else {
                         //Request camera permission if we don't have it.
                         Log.d("check", "1");
                         requestPermissions(new String[]{Manifest.permission.CAMERA}, 100);
                     }
                 }
-
-
-                /*
-                Intent intent = new Intent(Intent.ACTION_PICK);
-                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                startActivityForResult(intent, REQUEST_CODE);*/
             }
         });
-
         // IMAGE DETECTION 버튼
-        btn_detection_image = findViewById(R.id.btn_detection_image);
+       btn_detection_image = findViewById(R.id.btn_detection_image);
         btn_detection_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("111","34");
                 TextRecognition(recognizer);
             }
         });
-
-
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 1 && resultCode == RESULT_OK) {
-            Log.d("asdfd", "asdfdffsad");
             Bitmap image = (Bitmap) data.getExtras().get("data");
             int dimension = Math.min(image.getWidth(), image.getHeight());
             image = ThumbnailUtils.extractThumbnail(image, dimension, dimension);
@@ -131,16 +128,12 @@ public class Ocr1 extends AppCompatActivity {
             Intent intent2 = new Intent(Ocr1.this, Ocr1.class);
             intent2.putExtra("image", image);
             startActivity(intent2);
-
-
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
-
     // uri를 비트맵으로 변환시킨후 이미지뷰에 띄워주고 InputImage를 생성하는 메서드
     private void setImage(Bitmap bitmap) {
             imageView.setImageBitmap(bitmap);
-
             image = InputImage.fromBitmap(bitmap, 0);
             Log.e("setImage", "이미지 to 비트맵");
     }
@@ -151,7 +144,6 @@ public class Ocr1 extends AppCompatActivity {
                 .addOnSuccessListener(new OnSuccessListener<Text>() {
                     @Override
                     public void onSuccess(Text visionText) {
-                        Log.e("텍스트 인식", "성공");
                         // Task completed successfully
                         String resultText = visionText.getText();
                         text_info.setText(resultText);  // 인식한 텍스트를 TextView에 세팅
@@ -162,14 +154,13 @@ public class Ocr1 extends AppCompatActivity {
                         new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
+                                text_info.setText("텍스트 인식에 실패했습니다");
                                 Log.e("텍스트 인식", "실패: " + e.getMessage());
                             }
                         });
     }
+*/
 
-
-
-}
 /*
     private SurfaceView surfaceView;
     private TextView textView;
